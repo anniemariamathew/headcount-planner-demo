@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geotab Headcount Planner — Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f0f2f5; color: #1a1a1a; }
+
+  /* ── Nav ── */
+  .nav { background: #003366; padding: 0 28px; display: flex; align-items: center; gap: 4px; }
+  .nav-brand { color: #fff; font-weight: 700; font-size: 16px; padding: 18px 0; margin-right: 24px; white-space: nowrap; }
+  .nav-brand span { color: #aac4e0; font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .nav-tab { color: #aac4e0; font-size: 13px; padding: 18px 14px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
+  .nav-tab:hover { color: #fff; }
+  .nav-tab.active { color: #fff; border-bottom-color: #4db8ff; }
+  .nav-spacer { flex: 1; }
+  .role-switcher { display: flex; align-items: center; gap: 8px; padding: 10px 0; }
+  .role-switcher label { color: #aac4e0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+  .role-switcher select {
+    background: #002244; color: #fff; border: 1px solid #4db8ff; border-radius: 4px;
+    padding: 5px 10px; font-size: 12px; cursor: pointer; outline: none;
+  }
+  .role-switcher select option { background: #003366; }
+
+  /* ── Role banner ── */
+  .role-banner { padding: 8px 28px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+  .role-banner.ta   { background: #003366; color: #aac4e0; }
+  .role-banner.dept { background: #1565C0; color: #E3F2FD; }
+  .role-banner strong { color: #fff; }
+
+  /* ── Screens ── */
+  .screen { display: none; padding: 28px; max-width: 1100px; margin: 0 auto; }
+  .screen.active { display: block; }
+
+  /* ── Page header ── */
+  .page-header { margin-bottom: 24px; }
+  .page-header h1 { font-size: 22px; color: #003366; font-weight: 700; }
+  .page-header p { color: #555; font-size: 13px; margin-top: 4px; }
+
+  /* ── Summary cards ── */
+  .cards { display: grid; gap: 16px; margin-bottom: 28px; }
+  .cards-4 { grid-template-columns: repeat(4, 1fr); }
+  .cards-5 { grid-template-columns: repeat(5, 1fr); }
+  .card { background: #fff; border-radius: 8px; padding: 20px 22px; border: 1px solid #dde3ea; }
+  .card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; font-weight: 600; }
+  .card-value { font-size: 32px; font-weight: 700; color: #003366; margin-top: 4px; }
+  .card-sub { font-size: 12px; color: #888; margin-top: 4px; }
+  .card.green .card-value { color: #2E7D31; }
+  .card.amber .card-value { color: #C8A000; }
+  .card.red   .card-value { color: #C0392B; }
+
+  /* ── Tables ── */
+  .table-card { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; overflow: hidden; margin-bottom: 28px; }
+  .table-header { padding: 16px 20px; border-bottom: 1px solid #dde3ea; display: flex; align-items: center; justify-content: space-between; }
+  .table-header h2 { font-size: 15px; color: #003366; font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #f4f7fb; padding: 10px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #666; font-weight: 700; border-bottom: 1px solid #dde3ea; }
+  td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #f0f2f5; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafbfc; }
+  .dept-name { font-weight: 600; color: #003366; }
+  .sub-dept { font-size: 11px; color: #888; }
+
+  /* ── RAG ── */
+  .rag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .rag-green { background: #E8F5E9; color: #2E7D31; }
+  .rag-amber { background: #FFF8E1; color: #C8A000; }
+  .rag-red   { background: #FCEAEA; color: #C0392B; }
+
+  /* ── Progress bar ── */
+  .progress-wrap { width: 90px; background: #eee; border-radius: 4px; height: 6px; display: inline-block; vertical-align: middle; }
+  .progress-bar  { height: 6px; border-radius: 4px; }
+  .bar-green { background: #2E7D31; }
+  .bar-amber { background: #C8A000; }
+  .bar-red   { background: #C0392B; }
+  .progress-label { font-size: 11px; color: #666; margin-left: 6px; vertical-align: middle; }
+
+  /* ── Variance ── */
+  .var-pos { color: #2E7D31; font-weight: 700; }
+  .var-neg { color: #C0392B; font-weight: 700; }
+
+  /* ── Buttons ── */
+  .btn { display: inline-block; padding: 9px 18px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; }
+  .btn-primary { background: #003366; color: #fff; }
+  .btn-primary:hover { background: #004a99; }
+  .btn-outline { background: #fff; color: #003366; border: 1px solid #003366; }
+  .btn-green { background: #00703C; color: #fff; }
+  .btn-green:hover { background: #005a30; }
+
+  /* ── Form ── */
+  .form-card { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; overflow: hidden; }
+  .form-head { background: #003366; padding: 20px 28px; }
+  .form-head h2 { color: #fff; font-size: 17px; font-weight: 700; }
+  .form-head p { color: #aac4e0; font-size: 12px; margin-top: 4px; }
+  .form-body { padding: 28px; }
+  .form-section { margin-bottom: 28px; }
+  .form-section-title { font-size: 12px; font-weight: 700; color: #003366; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 2px solid #003366; padding-bottom: 6px; margin-bottom: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-row.three  { grid-template-columns: 1fr 1fr 1fr; }
+  .field label { display: block; font-size: 12px; font-weight: 600; color: #444; margin-bottom: 5px; }
+  .field label .req { color: #C0392B; margin-left: 2px; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid #ccd3dc; border-radius: 4px;
+    font-size: 13px; font-family: Arial, sans-serif; color: #1a1a1a; background: #fff;
+  }
+  .field textarea { height: 90px; resize: vertical; }
+  .field .hint { font-size: 11px; color: #888; margin-top: 3px; }
+
+  /* ── Capacity banner (form) ── */
+  .cap-banner { background: #EBF4FF; border: 1px solid #c0d8f5; border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; display: flex; gap: 28px; align-items: center; }
+  .cap-item .cval { font-size: 22px; font-weight: 700; color: #003366; }
+  .cap-item .clbl { font-size: 10px; text-transform: uppercase; color: #666; font-weight: 600; letter-spacing: 0.04em; }
+  .cap-divider { width: 1px; background: #c0d8f5; height: 36px; }
+
+  /* ── Status badges ── */
+  .status-badge { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .s-gh    { background: #E8F5E9; color: #2E7D31; }
+  .s-sub   { background: #E3F2FD; color: #1565C0; }
+  .s-defer { background: #FCEAEA; color: #C0392B; }
+  .s-hired { background: #E8F5E9; color: #2E7D31; }
+
+  /* ── Dept leader dept card ── */
+  .dept-hero { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; padding: 24px 28px; margin-bottom: 28px; display: flex; gap: 0; }
+  .dept-hero-main { flex: 1; }
+  .dept-hero-main h2 { font-size: 20px; color: #003366; font-weight: 700; }
+  .dept-hero-main p  { font-size: 13px; color: #666; margin-top: 4px; }
+  .dept-hero-stats { display: flex; gap: 32px; margin-top: 20px; }
+  .dhs { text-align: center; }
+  .dhs .v { font-size: 28px; font-weight: 700; color: #003366; }
+  .dhs .l { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+  .dhs.green .v { color: #2E7D31; }
+  .dhs.amber .v { color: #C8A000; }
+  .dhs.red   .v { color: #C0392B; }
+  .dept-hero-bar { width: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-left: 1px solid #dde3ea; padding-left: 28px; gap: 6px; }
+  .big-bar-wrap { width: 100%; background: #eee; border-radius: 6px; height: 12px; }
+  .big-bar { height: 12px; border-radius: 6px; background: #2E7D31; width: 92%; }
+  .big-bar-label { font-size: 12px; color: #555; }
+
+  /* ── Sub-dept breakdown ── */
+  .subdept-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+  .subdept-card { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; padding: 16px 18px; }
+  .subdept-card h3 { font-size: 13px; font-weight: 700; color: #003366; margin-bottom: 12px; }
+  .subdept-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #f4f4f4; }
+  .subdept-row:last-child { border-bottom: none; }
+  .subdept-row .sk { color: #888; }
+  .subdept-row .sv { font-weight: 600; }
+
+  /* ── Confirm ── */
+  .confirm-card { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; max-width: 600px; margin: 0 auto; overflow: hidden; }
+  .confirm-head { background: #003366; padding: 28px; text-align: center; }
+  .confirm-icon { font-size: 48px; margin-bottom: 8px; }
+  .confirm-head h2 { color: #fff; font-size: 20px; }
+  .confirm-head p { color: #aac4e0; font-size: 13px; margin-top: 6px; }
+  .confirm-body { padding: 28px; }
+  .confirm-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f0f2f5; font-size: 13px; }
+  .confirm-row:last-child { border-bottom: none; }
+  .confirm-row .rlabel { color: #888; }
+  .confirm-row .rval   { font-weight: 600; }
+  .confirm-footer { background: #f4f7fb; padding: 16px 28px; text-align: center; }
+  .gh-link { display: inline-block; margin-top: 10px; padding: 10px 22px; background: #003366; color: #fff; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: 600; }
+
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; background: #EBF4FF; color: #003366; font-weight: 600; }
+
+  /* ── Access notice ── */
+  .access-notice { background: #FFF8E1; border: 1px solid #ffe082; border-radius: 6px; padding: 10px 16px; font-size: 12px; color: #5d4037; margin-bottom: 20px; }
+
+  /* ── Action buttons (pending approvals) ── */
+  .action-btn { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; }
+  .btn-approve { background: #00703C; color: #fff; margin-right: 6px; }
+  .btn-reject  { background: #C0392B; color: #fff; }
+  .age-ok  { color: #888; }
+  .age-old { color: #C0392B; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<div class="nav">
+  <div class="nav-brand">Geotab Headcount Planner <span>TA Ops</span></div>
+
+  <!-- Tabs rendered by JS based on role -->
+  <div id="nav-tabs"></div>
+
+  <div class="nav-spacer"></div>
+
+  <div class="role-switcher">
+    <label>Demo: viewing as</label>
+    <select id="role-select" onchange="switchRole(this.value)">
+      <option value="ta">TA / HR / Exec</option>
+      <option value="techdev">TechDev Leader (Sarah Chen)</option>
+      <option value="revgen">RevGen Leader (Marcus Reid)</option>
+      <option value="ops">Ops Leader (Priya Nair)</option>
+    </select>
+  </div>
+</div>
+
+<!-- ── Role banner ── -->
+<div id="role-banner" class="role-banner ta">
+  &#128274; <strong>TA / HR / Exec view</strong> — full organisation dashboard
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  TA / EXEC SCREENS                                                  -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<!-- TA Dashboard -->
+<div class="screen active" id="screen-ta-dashboard">
+  <div class="page-header">
+    <h1>Headcount Planning — FY 2026</h1>
+    <p>Full organisation view. Caps from HC Plan sheet. In-Flight = open reqs in Greenhouse not yet filled.</p>
+  </div>
+
+  <div class="cards cards-4">
+    <div class="card">
+      <div class="card-label">Total HC Cap</div>
+      <div class="card-value">312</div>
+      <div class="card-sub">Approved budget headcount</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Current FTE</div>
+      <div class="card-value">274</div>
+      <div class="card-sub">Active employees (Dayforce)</div>
+    </div>
+    <div class="card amber">
+      <div class="card-label">In-Flight</div>
+      <div class="card-value">21</div>
+      <div class="card-sub">Open reqs in Greenhouse</div>
+    </div>
+    <div class="card green">
+      <div class="card-label">Remaining Capacity</div>
+      <div class="card-value">+17</div>
+      <div class="card-sub">Cap &#8722; FTE &#8722; In-Flight</div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>By Department</h2>
+      <span class="tag">All departments</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>HC Cap</th>
+          <th>Current FTE</th>
+          <th>In-Flight</th>
+          <th>Utilisation</th>
+          <th>Variance to Cap</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="dept-name">TechDev</div><div class="sub-dept">Engineering · Product</div></td>
+          <td>138</td><td>118</td><td>9</td>
+          <td><div class="progress-wrap"><div class="progress-bar bar-green" style="width:92%"></div></div><span class="progress-label">92%</span></td>
+          <td class="var-pos">+11</td><td><span class="rag rag-green">On Track</span></td>
+        </tr>
+        <tr>
+          <td><div class="dept-name">RevGen</div><div class="sub-dept">Sales · Marketing · RevSupport</div></td>
+          <td>72</td><td>67</td><td>6</td>
+          <td><div class="progress-wrap"><div class="progress-bar bar-amber" style="width:100%"></div></div><span class="progress-label">101%</span></td>
+          <td class="var-neg">&#8722;1</td><td><span class="rag rag-amber">At Cap</span></td>
+        </tr>
+        <tr>
+          <td><div class="dept-name">Ops</div><div class="sub-dept">TechOps · PeopleOps · FinOps · Legal</div></td>
+          <td>54</td><td>49</td><td>3</td>
+          <td><div class="progress-wrap"><div class="progress-bar bar-green" style="width:96%"></div></div><span class="progress-label">96%</span></td>
+          <td class="var-pos">+2</td><td><span class="rag rag-green">On Track</span></td>
+        </tr>
+        <tr>
+          <td><div class="dept-name">SMB</div><div class="sub-dept">SMB Sales · SMB Success</div></td>
+          <td>32</td><td>28</td><td>2</td>
+          <td><div class="progress-wrap"><div class="progress-bar bar-green" style="width:94%"></div></div><span class="progress-label">94%</span></td>
+          <td class="var-pos">+2</td><td><span class="rag rag-green">On Track</span></td>
+        </tr>
+        <tr>
+          <td><div class="dept-name">GeoVitality</div><div class="sub-dept">Vitality</div></td>
+          <td>16</td><td>12</td><td>1</td>
+          <td><div class="progress-wrap"><div class="progress-bar bar-amber" style="width:81%"></div></div><span class="progress-label">81%</span></td>
+          <td class="var-pos">+3</td><td><span class="rag rag-green">On Track</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>All Requests — Last 30 Days</h2>
+      <span class="tag">Organisation-wide</span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Req ID</th><th>Role</th><th>Dept</th><th>HM</th><th>Hire Type</th><th>Priority</th><th>Submitted</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-051</td>
+          <td><strong>Software Engineering, Senior</strong></td><td>TechDev</td><td>S. Chen</td>
+          <td>Net New</td><td><span class="rag rag-amber">P2</span></td><td>Aug 9</td>
+          <td><span class="status-badge s-gh">In Greenhouse</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-050</td>
+          <td><strong>Account Executive, Mid-Level</strong></td><td>RevGen</td><td>M. Reid</td>
+          <td>Backfill</td><td><span class="rag rag-red">P1</span></td><td>Aug 7</td>
+          <td><span class="status-badge s-gh">In Greenhouse</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-049</td>
+          <td><strong>Product Manager, Principal</strong></td><td>TechDev</td><td>S. Chen</td>
+          <td>Net New</td><td><span class="rag rag-amber">P2</span></td><td>Aug 5</td>
+          <td><span class="status-badge s-sub">COO Review</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-047</td>
+          <td><strong>Customer Success Manager</strong></td><td>RevGen</td><td>M. Reid</td>
+          <td>Net New</td><td><span class="rag rag-amber">P2</span></td><td>Jul 31</td>
+          <td><span class="status-badge s-defer">Over Cap — Deferred</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-046</td>
+          <td><strong>HR Business Partner</strong></td><td>Ops</td><td>P. Nair</td>
+          <td>Net New</td><td><span class="rag rag-green">P3</span></td><td>Jul 28</td>
+          <td><span class="status-badge s-gh">In Greenhouse</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TA All Requests tab (full list) — same data, different framing -->
+<div class="screen" id="screen-ta-requests">
+  <div class="page-header">
+    <h1>All Headcount Requests</h1>
+    <p>Complete log of requests across all departments. Filter by status or department in the live tool.</p>
+  </div>
+  <div class="access-notice">&#128274; This view is restricted to TA, HR, and Exec roles. Department leaders see only their own team's requests.</div>
+  <div class="table-card">
+    <div class="table-header"><h2>FY 2026 — All Departments</h2><span class="tag">TA / HR view</span></div>
+    <table>
+      <thead>
+        <tr><th>Req ID</th><th>Role</th><th>Dept</th><th>HM</th><th>Hire Type</th><th>Salary Range</th><th>Priority</th><th>Submitted</th><th>Status</th><th>GH Job</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-051</td><td><strong>Software Engineering, Senior</strong></td>
+          <td>TechDev</td><td>S. Chen</td><td>Net New</td><td>$110k–$140k</td>
+          <td><span class="rag rag-amber">P2</span></td><td>Aug 9</td>
+          <td><span class="status-badge s-gh">In Greenhouse</span></td>
+          <td><a href="#" style="color:#003366;font-size:12px;">View &#8594;</a></td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-050</td><td><strong>Account Executive, Mid-Level</strong></td>
+          <td>RevGen</td><td>M. Reid</td><td>Backfill</td><td>$80k–$100k</td>
+          <td><span class="rag rag-red">P1</span></td><td>Aug 7</td>
+          <td><span class="status-badge s-gh">In Greenhouse</span></td>
+          <td><a href="#" style="color:#003366;font-size:12px;">View &#8594;</a></td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-049</td><td><strong>Product Manager, Principal</strong></td>
+          <td>TechDev</td><td>S. Chen</td><td>Net New</td><td>$125k–$155k</td>
+          <td><span class="rag rag-amber">P2</span></td><td>Aug 5</td>
+          <td><span class="status-badge s-sub">COO Review</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-047</td><td><strong>Customer Success Manager</strong></td>
+          <td>RevGen</td><td>M. Reid</td><td>Net New</td><td>$85k–$110k</td>
+          <td><span class="rag rag-amber">P2</span></td><td>Jul 31</td>
+          <td><span class="status-badge s-defer">Over Cap — Deferred</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-046</td><td><strong>HR Business Partner</strong></td>
+          <td>Ops</td><td>P. Nair</td><td>Net New</td><td>$90k–$115k</td>
+          <td><span class="rag rag-green">P3</span></td><td>Jul 28</td>
+          <td><span class="status-badge s-gh">In Greenhouse</span></td>
+          <td><a href="#" style="color:#003366;font-size:12px;">View &#8594;</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TA Pending Approvals tab -->
+<div class="screen" id="screen-ta-pending">
+  <div class="page-header">
+    <h1>Pending Approvals</h1>
+    <p>Requests awaiting Division Leader or COO action. Approve or reject directly from this view.</p>
+  </div>
+
+  <div class="cards cards-4" style="margin-bottom:20px;">
+    <div class="card amber">
+      <div class="card-label">Awaiting Approval</div>
+      <div class="card-value">2</div>
+      <div class="card-sub">Requests in approval queue</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Division Review</div>
+      <div class="card-value">1</div>
+      <div class="card-sub">Waiting on Division Leader</div>
+    </div>
+    <div class="card">
+      <div class="card-label">COO Review</div>
+      <div class="card-value">1</div>
+      <div class="card-sub">Division approved — COO next</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Oldest Pending</div>
+      <div class="card-value" style="color:#C0392B;">7d</div>
+      <div class="card-sub">Days since submission</div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Action Required</h2>
+      <span class="tag">2 open</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Req ID</th>
+          <th>Role</th>
+          <th>Client Group</th>
+          <th>HM</th>
+          <th>Stage</th>
+          <th>Waiting On</th>
+          <th>Submitted</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-049</td>
+          <td><strong>Product Manager, Principal</strong></td>
+          <td>TechDev</td>
+          <td>S. Chen</td>
+          <td><span class="status-badge s-sub">COO Review</span></td>
+          <td style="color:#888;font-size:12px;">ceo@geotab.com</td>
+          <td>Aug 5 <span class="age-ok">(7d)</span></td>
+          <td>
+            <a href="#" class="action-btn btn-approve" onclick="showToast('Approved — email sent to COO');return false;">&#10003; Approve</a>
+            <a href="#" class="action-btn btn-reject" onclick="showToast('Rejected — HM notified');return false;">&#10007; Reject</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-052</td>
+          <td><strong>DevOps Engineering, Senior</strong></td>
+          <td>TechDev</td>
+          <td>S. Chen</td>
+          <td><span class="status-badge" style="background:#FFF3CD;color:#856404;">Division Review</span></td>
+          <td style="color:#888;font-size:12px;">divleader@geotab.com</td>
+          <td>Aug 11 <span class="age-ok">(1d)</span></td>
+          <td>
+            <a href="#" class="action-btn btn-approve" onclick="showToast('Approved — COO notified');return false;">&#10003; Approve</a>
+            <a href="#" class="action-btn btn-reject" onclick="showToast('Rejected — HM notified');return false;">&#10007; Reject</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Recently Resolved — Last 14 Days</h2>
+      <span class="tag">Completed</span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Req ID</th><th>Role</th><th>HM</th><th>Resolved By</th><th>Decision</th><th>Date</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-051</td>
+          <td><strong>Software Engineering, Senior</strong></td>
+          <td>S. Chen</td>
+          <td>COO</td>
+          <td><span class="rag rag-green">Approved → GH</span></td>
+          <td>Aug 9</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-050</td>
+          <td><strong>Account Executive, Mid-Level</strong></td>
+          <td>M. Reid</td>
+          <td>COO</td>
+          <td><span class="rag rag-green">Approved → GH</span></td>
+          <td>Aug 8</td>
+        </tr>
+        <tr>
+          <td style="font-family:monospace;color:#555">HC-2026-048</td>
+          <td><strong>Data Engineering, Senior</strong></td>
+          <td>S. Chen</td>
+          <td>Division Leader</td>
+          <td><span class="rag rag-red">Rejected</span></td>
+          <td>Aug 3</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Toast notification for demo actions -->
+<div id="toast" style="display:none;position:fixed;bottom:28px;right:28px;background:#003366;color:#fff;padding:12px 20px;border-radius:6px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:9999;"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!--  DEPARTMENT LEADER SCREENS (data-scoped to their team)             -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+
+<!-- Dept Dashboard -->
+<div class="screen" id="screen-dept-dashboard">
+  <div class="page-header">
+    <h1 id="dept-title">TechDev — Headcount Overview</h1>
+    <p>Your department's headcount position against approved cap. Submit a request to add a new role.</p>
+  </div>
+
+  <!-- Hero card for this dept -->
+  <div class="dept-hero">
+    <div class="dept-hero-main">
+      <h2 id="dept-hero-name">TechDev</h2>
+      <p id="dept-hero-sub">Engineering · Product</p>
+      <div class="dept-hero-stats">
+        <div class="dhs">
+          <div class="v" id="dh-cap">138</div>
+          <div class="l">HC Cap</div>
+        </div>
+        <div class="dhs">
+          <div class="v" id="dh-fte">118</div>
+          <div class="l">Current FTE</div>
+        </div>
+        <div class="dhs amber">
+          <div class="v" id="dh-flight">9</div>
+          <div class="l">In-Flight</div>
+        </div>
+        <div class="dhs green">
+          <div class="v" id="dh-remain">+11</div>
+          <div class="l">Remaining</div>
+        </div>
+      </div>
+    </div>
+    <div class="dept-hero-bar">
+      <div class="big-bar-label" style="font-size:11px;color:#888;margin-bottom:6px;">Capacity used</div>
+      <div class="big-bar-wrap"><div class="big-bar" id="dh-bar" style="width:92%;background:#2E7D31"></div></div>
+      <div class="big-bar-label" id="dh-pct" style="margin-top:6px;font-weight:700;color:#2E7D31">92%</div>
+      <div style="margin-top:4px;"><span class="rag rag-green" id="dh-rag">On Track</span></div>
+    </div>
+  </div>
+
+  <!-- Sub-department breakdown -->
+  <div id="subdept-grid" class="subdept-grid">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- This dept's requests -->
+  <div class="table-card">
+    <div class="table-header">
+      <h2>My Team's Requests</h2>
+      <button class="btn btn-primary" onclick="showDeptTab('form')">+ New Headcount Request</button>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Req ID</th><th>Role</th><th>Hire Type</th><th>Salary Range</th><th>Priority</th><th>Submitted</th><th>Status</th><th>GH Job</th></tr>
+      </thead>
+      <tbody id="dept-requests-body">
+        <!-- populated by JS -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Dept New Request Form -->
+<div class="screen" id="screen-dept-form">
+  <div class="page-header">
+    <h1>New Headcount Request</h1>
+    <p>Submit a new hire request. Once submitted, your Division Leader is notified. After both the Division Leader and COO approve, a job is created in Greenhouse.</p>
+  </div>
+
+  <div class="form-card">
+    <div class="form-head">
+      <h2>Headcount Request Form</h2>
+      <p>Fields marked * are required. Your request is logged against your department's cap before GH job creation.</p>
+    </div>
+    <div class="form-body">
+
+      <div class="cap-banner">
+        <div class="cap-item"><div class="cval" id="form-cap">138</div><div class="clbl">HC Cap</div></div>
+        <div class="cap-divider"></div>
+        <div class="cap-item"><div class="cval" id="form-fte">118</div><div class="clbl">Current FTE</div></div>
+        <div class="cap-divider"></div>
+        <div class="cap-item"><div class="cval" id="form-flight">9</div><div class="clbl">In-Flight</div></div>
+        <div class="cap-divider"></div>
+        <div class="cap-item"><div class="cval" id="form-remain" style="color:#2E7D31">+11</div><div class="clbl">Remaining</div></div>
+        <div style="margin-left:auto;font-size:12px;color:#666;max-width:200px;line-height:1.5;">
+          Capacity for <strong id="form-deptname">TechDev</strong>. This request counts against cap on submit.
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">1 · Your Details</div>
+        <div class="form-row">
+          <div class="field">
+            <label>Your Full Name <span class="req">*</span></label>
+            <input type="text" id="form-name" value="Sarah Chen">
+          </div>
+          <div class="field">
+            <label>Your Email <span class="req">*</span></label>
+            <input type="email" id="form-email" value="schen@geotab.com">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">2 · Role Details</div>
+        <div class="form-row">
+          <div class="field">
+            <label>Job Title <span class="req">*</span></label>
+            <input type="text" value="Software Engineering, Senior">
+            <div class="hint">Use Geotab title format — Engineering not Engineer</div>
+          </div>
+          <div class="field">
+            <label>Level / Band <span class="req">*</span></label>
+            <select>
+              <option>Junior</option><option>Mid-Level</option>
+              <option selected>Senior</option><option>Principal</option>
+              <option>Lead</option><option>Manager</option><option>Director</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="field">
+            <label>Department <span class="req">*</span></label>
+            <select id="form-dept-select">
+              <!-- options scoped to their dept by JS -->
+            </select>
+          </div>
+          <div class="field">
+            <label>Client Group <span class="req">*</span></label>
+            <select id="form-cg-select">
+              <!-- options scoped by JS -->
+            </select>
+          </div>
+          <div class="field">
+            <label>Hire Type <span class="req">*</span></label>
+            <select>
+              <option selected>Net New</option><option>Backfill</option><option>Replacement</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">3 · Logistics</div>
+        <div class="form-row three">
+          <div class="field">
+            <label>Target Start Date <span class="req">*</span></label>
+            <input type="date" value="2026-11-01">
+          </div>
+          <div class="field">
+            <label>Location <span class="req">*</span></label>
+            <select>
+              <option selected>Toronto HQ</option><option>Remote - Canada</option>
+              <option>Remote - US</option><option>Europe - UK</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Priority <span class="req">*</span></label>
+            <select>
+              <option>P1 — Critical</option><option selected>P2 — High</option><option>P3 — Standard</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">4 · Compensation</div>
+        <div class="form-row">
+          <div class="field"><label>Salary Min (CAD or USD)</label><input type="text" value="110000"></div>
+          <div class="field"><label>Salary Max (CAD or USD)</label><input type="text" value="140000"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">5 · Business Case</div>
+        <div class="form-row single">
+          <div class="field">
+            <label>Business Justification <span class="req">*</span></label>
+            <textarea>This role is required to support expansion of our core platform team following Q3 growth targets. The current team is at capacity and this hire directly unblocks two committed OKRs for Q4.</textarea>
+            <div class="hint">Why is this role needed? What business outcome does it support?</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:right;">
+        <button class="btn btn-outline" style="margin-right:12px;">Save Draft</button>
+        <button class="btn btn-green" onclick="showDeptTab('confirm')">Submit for Approval &#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dept Confirmation -->
+<div class="screen" id="screen-dept-confirm">
+  <div style="padding:20px 0;">
+    <div class="confirm-card">
+      <div class="confirm-head">
+        <div class="confirm-icon">&#9989;</div>
+        <h2>Headcount Request Submitted</h2>
+        <p>Your Division Leader has been notified for Tier-1 approval.</p>
+      </div>
+      <div class="confirm-body">
+        <div class="confirm-row"><span class="rlabel">Request ID</span><span class="rval" style="font-family:monospace">HC-2026-052</span></div>
+        <div class="confirm-row"><span class="rlabel">Role</span><span class="rval">Software Engineering, Senior</span></div>
+        <div class="confirm-row"><span class="rlabel">Department</span><span class="rval" id="confirm-dept">Engineering · TechDev</span></div>
+        <div class="confirm-row"><span class="rlabel">Hire Type</span><span class="rval">Net New</span></div>
+        <div class="confirm-row"><span class="rlabel">Target Start</span><span class="rval">Nov 1, 2026</span></div>
+        <div class="confirm-row"><span class="rlabel">Salary Range</span><span class="rval">$110,000 – $140,000</span></div>
+        <div class="confirm-row"><span class="rlabel">Priority</span><span class="rval">P2 — High</span></div>
+        <div class="confirm-row"><span class="rlabel">Step 1</span><span class="rval">Division Leader — notified ✓</span></div>
+        <div class="confirm-row"><span class="rlabel">Step 2</span><span class="rval" style="color:#888;">COO — pending Division approval</span></div>
+        <div class="confirm-row"><span class="rlabel">After both approve</span><span class="rval" style="color:#888;">Job created in Greenhouse automatically</span></div>
+      </div>
+      <div class="confirm-footer">
+        <div style="font-size:13px;color:#555;">Your request is now visible on your team dashboard. You'll receive email updates at each stage.</div>
+        <a href="#" onclick="showDeptTab('dashboard');return false;" style="display:inline-block;margin-top:12px;font-size:12px;color:#888;">&#8592; Back to My Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<script>
+// ── Department data ──────────────────────────────────────────────────
+var DEPTS = {
+  techdev: {
+    name: 'TechDev', sub: 'Engineering · Product', cg: 'TechDev',
+    cap: 138, fte: 118, flight: 9, remain: 11, pct: 92, ragClass: 'rag-green', ragLabel: 'On Track', barColor: '#2E7D31', barPct: 92,
+    leader: 'Sarah Chen', email: 'schen@geotab.com',
+    depts: ['Engineering', 'Product'],
+    subdepts: [
+      { name: 'Core Platform', cap: 52, fte: 44, flight: 4 },
+      { name: 'Mobile & Connected', cap: 38, fte: 33, flight: 3 },
+      { name: 'Product Management', cap: 28, fte: 24, flight: 2 },
+      { name: 'Data & ML', cap: 20, fte: 17, flight: 0 }
+    ],
+    requests: [
+      { id: 'HC-2026-051', role: 'Software Engineering, Senior', type: 'Net New', salary: '$110k–$140k', pri: 'P2', priClass: 'rag-amber', date: 'Aug 9', status: 'In Greenhouse', sClass: 's-gh' },
+      { id: 'HC-2026-049', role: 'Product Manager, Principal', type: 'Net New', salary: '$125k–$155k', pri: 'P2', priClass: 'rag-amber', date: 'Aug 5', status: 'COO Review', sClass: 's-sub' },
+      { id: 'HC-2026-039', role: 'Software Engineering, Mid-Level', type: 'Backfill', salary: '$85k–$105k', pri: 'P1', priClass: 'rag-red', date: 'Jul 14', status: 'In Greenhouse', sClass: 's-gh' },
+      { id: 'HC-2026-028', role: 'DevOps Engineering, Lead', type: 'Net New', salary: '$130k–$160k', pri: 'P2', priClass: 'rag-amber', date: 'Jun 10', status: 'Hired ✓', sClass: 's-hired' }
+    ]
+  },
+  revgen: {
+    name: 'RevGen', sub: 'Sales · Marketing · RevSupport', cg: 'RevGen',
+    cap: 72, fte: 67, flight: 6, remain: -1, pct: 101, ragClass: 'rag-amber', ragLabel: 'At Cap', barColor: '#C8A000', barPct: 100,
+    leader: 'Marcus Reid', email: 'mreid@geotab.com',
+    depts: ['Sales', 'Marketing', 'Customer Success'],
+    subdepts: [
+      { name: 'Enterprise Sales', cap: 28, fte: 27, flight: 2 },
+      { name: 'Marketing', cap: 18, fte: 18, flight: 3 },
+      { name: 'RevSupport', cap: 14, fte: 12, flight: 1 },
+      { name: 'Channel & Partnerships', cap: 12, fte: 10, flight: 0 }
+    ],
+    requests: [
+      { id: 'HC-2026-050', role: 'Account Executive, Mid-Level', type: 'Backfill', salary: '$80k–$100k', pri: 'P1', priClass: 'rag-red', date: 'Aug 7', status: 'In Greenhouse', sClass: 's-gh' },
+      { id: 'HC-2026-047', role: 'Customer Success Manager', type: 'Net New', salary: '$85k–$110k', pri: 'P2', priClass: 'rag-amber', date: 'Jul 31', status: 'Over Cap — Deferred', sClass: 's-defer' },
+      { id: 'HC-2026-041', role: 'Marketing Manager, Senior', type: 'Net New', salary: '$95k–$120k', pri: 'P3', priClass: 'rag-green', date: 'Jul 20', status: 'In Greenhouse', sClass: 's-gh' }
+    ]
+  },
+  ops: {
+    name: 'Ops', sub: 'TechOps · PeopleOps · FinOps · Legal', cg: 'Ops',
+    cap: 54, fte: 49, flight: 3, remain: 2, pct: 96, ragClass: 'rag-green', ragLabel: 'On Track', barColor: '#2E7D31', barPct: 96,
+    leader: 'Priya Nair', email: 'pnair@geotab.com',
+    depts: ['Operations', 'People Operations', 'Finance', 'Legal'],
+    subdepts: [
+      { name: 'TechOps', cap: 18, fte: 16, flight: 1 },
+      { name: 'People Operations', cap: 14, fte: 13, flight: 1 },
+      { name: 'FinOps', cap: 12, fte: 11, flight: 1 },
+      { name: 'Legal', cap: 10, fte: 9, flight: 0 }
+    ],
+    requests: [
+      { id: 'HC-2026-046', role: 'HR Business Partner', type: 'Net New', salary: '$90k–$115k', pri: 'P3', priClass: 'rag-green', date: 'Jul 28', status: 'In Greenhouse', sClass: 's-gh' },
+      { id: 'HC-2026-038', role: 'Financial Analyst, Senior', type: 'Backfill', salary: '$85k–$108k', pri: 'P2', priClass: 'rag-amber', date: 'Jul 10', status: 'Hired ✓', sClass: 's-hired' }
+    ]
+  }
+};
+
+var currentRole = 'ta';
+var currentDept = null;
+
+// ── Role switch ───────────────────────────────────────────────────────
+function switchRole(val) {
+  currentRole = val;
+  var banner = document.getElementById('role-banner');
+  var navTabs = document.getElementById('nav-tabs');
+
+  if (val === 'ta') {
+    banner.className = 'role-banner ta';
+    banner.innerHTML = '&#128274; <strong>TA / HR / Exec view</strong> &mdash; full organisation dashboard';
+    navTabs.innerHTML =
+      '<div class="nav-tab active" onclick="showTA(\'dashboard\')">Dashboard</div>' +
+      '<div class="nav-tab" onclick="showTA(\'requests\')">All Requests</div>' +
+      '<div class="nav-tab" onclick="showTA(\'pending\')">Pending Approvals <span style="background:#C0392B;color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;font-weight:700;">2</span></div>';
+    showTA('dashboard');
+  } else {
+    currentDept = val;
+    var d = DEPTS[val];
+    banner.className = 'role-banner dept';
+    banner.innerHTML = '&#128100; Viewing as <strong>' + d.leader + '</strong> (' + d.name + ' Leader) &mdash; you can only see your department\'s data';
+    navTabs.innerHTML =
+      '<div class="nav-tab active" onclick="showDeptTab(\'dashboard\')">My Dashboard</div>' +
+      '<div class="nav-tab" onclick="showDeptTab(\'form\')">New Request</div>';
+    populateDeptView(d);
+    showDeptTab('dashboard');
+  }
+}
+
+function showTA(name) {
+  hideAll();
+  document.getElementById('screen-ta-' + name).classList.add('active');
+  var idx = { dashboard: 0, requests: 1, pending: 2 }[name] || 0;
+  updateNavActive(idx);
+}
+
+function showDeptTab(name) {
+  hideAll();
+  document.getElementById('screen-dept-' + name).classList.add('active');
+  updateNavActive(name === 'dashboard' ? 0 : name === 'form' ? 1 : 0);
+}
+
+function hideAll() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+}
+
+function updateNavActive(idx) {
+  document.querySelectorAll('#nav-tabs .nav-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+}
+
+// ── Populate dept view ─────────────────────────────────────────────
+function populateDeptView(d) {
+  // Hero
+  document.getElementById('dept-title').textContent = d.name + ' — Headcount Overview';
+  document.getElementById('dept-hero-name').textContent = d.name;
+  document.getElementById('dept-hero-sub').textContent = d.sub;
+  document.getElementById('dh-cap').textContent = d.cap;
+  document.getElementById('dh-fte').textContent = d.fte;
+  document.getElementById('dh-flight').textContent = d.flight;
+  var remEl = document.getElementById('dh-remain');
+  remEl.textContent = (d.remain >= 0 ? '+' : '') + d.remain;
+  remEl.parentElement.className = 'dhs ' + (d.remain > 0 ? 'green' : d.remain === 0 ? 'amber' : 'red');
+  document.getElementById('dh-bar').style.width = Math.min(d.barPct, 100) + '%';
+  document.getElementById('dh-bar').style.background = d.barColor;
+  document.getElementById('dh-pct').textContent = d.pct + '%';
+  document.getElementById('dh-pct').style.color = d.barColor;
+  document.getElementById('dh-rag').className = 'rag ' + d.ragClass;
+  document.getElementById('dh-rag').textContent = d.ragLabel;
+
+  // Sub-dept grid
+  var grid = document.getElementById('subdept-grid');
+  grid.innerHTML = d.subdepts.map(function(sd) {
+    var rem = sd.cap - sd.fte - sd.flight;
+    var pct = Math.round(((sd.fte + sd.flight) / sd.cap) * 100);
+    return '<div class="subdept-card"><h3>' + sd.name + '</h3>' +
+      '<div class="subdept-row"><span class="sk">HC Cap</span><span class="sv">' + sd.cap + '</span></div>' +
+      '<div class="subdept-row"><span class="sk">Current FTE</span><span class="sv">' + sd.fte + '</span></div>' +
+      '<div class="subdept-row"><span class="sk">In-Flight</span><span class="sv">' + sd.flight + '</span></div>' +
+      '<div class="subdept-row"><span class="sk">Utilisation</span><span class="sv">' + pct + '%</span></div>' +
+      '<div class="subdept-row"><span class="sk">Remaining</span><span class="sv" style="color:' + (rem > 0 ? '#2E7D31' : rem === 0 ? '#C8A000' : '#C0392B') + '">' + (rem >= 0 ? '+' : '') + rem + '</span></div>' +
+      '</div>';
+  }).join('');
+
+  // Requests table
+  var tbody = document.getElementById('dept-requests-body');
+  tbody.innerHTML = d.requests.map(function(r) {
+    return '<tr>' +
+      '<td style="font-family:monospace;color:#555">' + r.id + '</td>' +
+      '<td><strong>' + r.role + '</strong></td>' +
+      '<td>' + r.type + '</td>' +
+      '<td>' + r.salary + '</td>' +
+      '<td><span class="rag ' + r.priClass + '">' + r.pri + '</span></td>' +
+      '<td>' + r.date + '</td>' +
+      '<td><span class="status-badge ' + r.sClass + '">' + r.status + '</span></td>' +
+      '<td>' + (r.sClass !== 's-defer' ? '<a href="#" style="color:#003366;font-size:12px;">View &#8594;</a>' : '—') + '</td>' +
+      '</tr>';
+  }).join('');
+
+  // Form fields
+  document.getElementById('form-cap').textContent = d.cap;
+  document.getElementById('form-fte').textContent = d.fte;
+  document.getElementById('form-flight').textContent = d.flight;
+  var formRemain = document.getElementById('form-remain');
+  formRemain.textContent = (d.remain >= 0 ? '+' : '') + d.remain;
+  formRemain.style.color = d.remain > 0 ? '#2E7D31' : '#C0392B';
+  document.getElementById('form-deptname').textContent = d.name;
+  document.getElementById('form-name').value = d.leader;
+  document.getElementById('form-email').value = d.email;
+  document.getElementById('confirm-dept').textContent = d.depts[0] + ' · ' + d.name;
+
+  // Scope dept dropdown to only this leader's departments
+  var deptSel = document.getElementById('form-dept-select');
+  deptSel.innerHTML = d.depts.map(function(dep) {
+    return '<option>' + dep + '</option>';
+  }).join('');
+
+  var cgSel = document.getElementById('form-cg-select');
+  cgSel.innerHTML = '<option selected>' + d.cg + '</option>';
+}
+
+// ── Toast ────────────────────────────────────────────────────────────
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function() { t.style.display = 'none'; }, 3000);
+}
+
+// ── Init ────────────────────────────────────────────────────────────
+(function() {
+  switchRole('ta');
+})();
+</script>
+</body>
+</html>
