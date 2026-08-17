@@ -1,12 +1,37 @@
 {
-  "synced": "2026-08-14T13:37:00",
+  "synced": "2026-08-17T13:33:38",
   "source": "Greenhouse BigQuery",
-  "note": "In-Flight = open + pending openings in Greenhouse (excludes interns, templates). Updated daily at 8:37 AM ET.",
+  "note": "In-Flight = open + pending openings (excludes interns, templates). Updated daily at 8:37 AM ET.",
   "cgs": [
-    { "name": "TechDev",  "cap": null, "fte": null, "flight": 28  },
-    { "name": "RevGen",   "cap": null, "fte": null, "flight": 62  },
-    { "name": "Ops",      "cap": null, "fte": null, "flight": 21  },
-    { "name": "SMB",      "cap": null, "fte": null, "flight": 38  },
-    { "name": "Vitality", "cap": null, "fte": null, "flight": 1   }
+    {
+      "name": "TechDev",
+      "cap": null,
+      "fte": null,
+      "flight": 0
+    },
+    {
+      "name": "RevGen",
+      "cap": null,
+      "fte": null,
+      "flight": 0
+    },
+    {
+      "name": "Ops",
+      "cap": null,
+      "fte": null,
+      "flight": 0
+    },
+    {
+      "name": "SMB",
+      "cap": null,
+      "fte": null,
+      "flight": 0
+    },
+    {
+      "name": "Vitality",
+      "cap": null,
+      "fte": null,
+      "flight": 0
+    }
   ]
 }
