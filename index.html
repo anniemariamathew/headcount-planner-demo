@@ -419,9 +419,16 @@
           </div>
           <div class="field">
             <label>Hire Type <span class="req">*</span></label>
-            <select>
-              <option selected>Net New</option><option>Backfill</option><option>Replacement</option>
+            <select id="form-hiretype-select" onchange="toggleBackfillField(this.value)">
+              <option selected>Net New</option><option>Backfill</option>
             </select>
+          </div>
+        </div>
+        <div class="form-row single" id="form-backfill-row" style="display:none;">
+          <div class="field">
+            <label>Name of Employee Being Replaced <span class="req">*</span></label>
+            <input type="text" id="form-backfill-name" placeholder="e.g. Alex Morgan">
+            <div class="hint">Required for Backfill hires — this is passed through to Greenhouse.</div>
           </div>
         </div>
       </div>
@@ -642,9 +649,18 @@ function populateDeptView(deptKey) {
 
   var cgSel = document.getElementById('form-cg-select');
   cgSel.innerHTML = '<option selected>' + meta.cg + '</option>';
+
+  document.getElementById('form-hiretype-select').value = 'Net New';
+  toggleBackfillField('Net New');
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────
+function toggleBackfillField(hireType) {
+  var row = document.getElementById('form-backfill-row');
+  row.style.display = (hireType === 'Backfill') ? '' : 'none';
+  if (hireType !== 'Backfill') document.getElementById('form-backfill-name').value = '';
+}
+
 function setText(id, val) {
   var el = document.getElementById(id);
   if (el) el.textContent = val;
