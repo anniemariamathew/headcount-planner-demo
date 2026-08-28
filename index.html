@@ -30,26 +30,6 @@
   .role-banner.dept { background: #1565C0; color: #E3F2FD; }
   .role-banner strong { color: #fff; }
 
-  /* ── Live data banner ── */
-  .live-banner {
-    background: #E8F5E9; border-bottom: 1px solid #c8e6c9;
-    padding: 6px 28px; font-size: 11px; color: #2E7D31;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .live-dot {
-    width: 8px; height: 8px; border-radius: 50%; background: #2E7D31;
-    animation: pulse 2s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50%      { opacity: 0.3; }
-  }
-  .live-banner.loading { background: #FFF8E1; border-color: #ffe082; color: #856404; }
-  .live-banner.loading .live-dot { background: #C8A000; animation: none; }
-  .live-banner.error { background: #FCEAEA; border-color: #f5c6cb; color: #C0392B; }
-  .live-banner.error .live-dot { background: #C0392B; animation: none; }
-
   /* ── Screens ── */
   .screen { display: none; padding: 28px; max-width: 1100px; margin: 0 auto; }
   .screen.active { display: block; }
@@ -129,44 +109,12 @@
   .field textarea { height: 90px; resize: vertical; }
   .field .hint { font-size: 11px; color: #888; margin-top: 3px; }
 
-  /* ── Capacity banner (form) ── */
-  .cap-banner { background: #EBF4FF; border: 1px solid #c0d8f5; border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; display: flex; gap: 28px; align-items: center; }
-  .cap-item .cval { font-size: 22px; font-weight: 700; color: #003366; }
-  .cap-item .clbl { font-size: 10px; text-transform: uppercase; color: #666; font-weight: 600; letter-spacing: 0.04em; }
-  .cap-divider { width: 1px; background: #c0d8f5; height: 36px; }
-
   /* ── Status badges ── */
   .status-badge { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; }
   .s-gh    { background: #E8F5E9; color: #2E7D31; }
   .s-sub   { background: #E3F2FD; color: #1565C0; }
   .s-defer { background: #FCEAEA; color: #C0392B; }
   .s-hired { background: #E8F5E9; color: #2E7D31; }
-
-  /* ── Dept leader dept card ── */
-  .dept-hero { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; padding: 24px 28px; margin-bottom: 28px; display: flex; gap: 0; }
-  .dept-hero-main { flex: 1; }
-  .dept-hero-main h2 { font-size: 20px; color: #003366; font-weight: 700; }
-  .dept-hero-main p  { font-size: 13px; color: #666; margin-top: 4px; }
-  .dept-hero-stats { display: flex; gap: 32px; margin-top: 20px; }
-  .dhs { text-align: center; }
-  .dhs .v { font-size: 28px; font-weight: 700; color: #003366; }
-  .dhs .l { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
-  .dhs.green .v { color: #2E7D31; }
-  .dhs.amber .v { color: #C8A000; }
-  .dhs.red   .v { color: #C0392B; }
-  .dept-hero-bar { width: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-left: 1px solid #dde3ea; padding-left: 28px; gap: 6px; }
-  .big-bar-wrap { width: 100%; background: #eee; border-radius: 6px; height: 12px; }
-  .big-bar { height: 12px; border-radius: 6px; background: #2E7D31; width: 92%; }
-  .big-bar-label { font-size: 12px; color: #555; }
-
-  /* ── Sub-dept breakdown ── */
-  .subdept-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
-  .subdept-card { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; padding: 16px 18px; }
-  .subdept-card h3 { font-size: 13px; font-weight: 700; color: #003366; margin-bottom: 12px; }
-  .subdept-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #f4f4f4; }
-  .subdept-row:last-child { border-bottom: none; }
-  .subdept-row .sk { color: #888; }
-  .subdept-row .sv { font-weight: 600; }
 
   /* ── Confirm ── */
   .confirm-card { background: #fff; border-radius: 8px; border: 1px solid #dde3ea; max-width: 600px; margin: 0 auto; overflow: hidden; }
@@ -187,12 +135,6 @@
 
   /* ── Access notice ── */
   .access-notice { background: #FFF8E1; border: 1px solid #ffe082; border-radius: 6px; padding: 10px 16px; font-size: 12px; color: #5d4037; margin-bottom: 20px; }
-
-  /* ── Setup callout (cap not configured) ── */
-  .setup-callout { background: #EBF4FF; border: 1px solid #c0d8f5; border-radius: 6px; padding: 12px 18px; font-size: 12px; color: #003366; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
-  .setup-callout strong { font-size: 13px; }
-  .setup-callout .sc-action { margin-left: auto; white-space: nowrap; font-size: 12px; font-weight: 600; color: #1565C0; text-decoration: none; cursor: pointer; }
-  .setup-callout .sc-action:hover { text-decoration: underline; }
 
   /* ── Action buttons (pending approvals) ── */
   .action-btn { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; }
@@ -228,123 +170,15 @@
 
 <!-- ── Role banner ── -->
 <div id="role-banner" class="role-banner ta">
-  &#128274; <strong>TA / HR / Exec view</strong> — full organisation dashboard
-</div>
-
-<!-- ── Live data banner ── -->
-<div id="live-banner" class="live-banner loading">
-  <div class="live-dot"></div>
-  <span id="live-banner-text">Loading live data from Greenhouse...</span>
+  &#128274; <strong>TA / HR / Exec view</strong> — all headcount requests
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════════ -->
 <!--  TA / EXEC SCREENS                                                  -->
 <!-- ════════════════════════════════════════════════════════════════════ -->
 
-<!-- TA Dashboard -->
-<div class="screen active" id="screen-ta-dashboard">
-  <div class="page-header">
-    <h1>Headcount Planning — FY 2026</h1>
-    <p>Full organisation view. In-Flight = open + pending openings in Greenhouse. HC Cap and FTE updated when configured.</p>
-  </div>
-
-  <div id="setup-callout" class="setup-callout" style="display:none;">
-    &#128274; <div><strong>HC Cap not configured</strong> — In-Flight is live. Enter HC Cap values in the <a href="https://docs.google.com/spreadsheets/d/1m_DmERxvPRGKZqwma3b1sSIt87Clq1GTlenaDg1h9ik/edit#gid=1784481796" target="_blank" style="color:#003366;">HC Plan sheet</a> to unlock utilisation and capacity metrics.</div>
-  </div>
-
-  <div class="cards cards-4">
-    <div class="card">
-      <div class="card-label">Total HC Cap</div>
-      <div class="card-value" id="card-total-cap">—</div>
-      <div class="card-sub">Approved budget headcount</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Current FTE</div>
-      <div class="card-value" id="card-total-fte">—</div>
-      <div class="card-sub">Active employees (Dayforce)</div>
-    </div>
-    <div class="card amber">
-      <div class="card-label">In-Flight</div>
-      <div class="card-value" id="card-total-flight">—</div>
-      <div class="card-sub">Open openings in Greenhouse</div>
-    </div>
-    <div class="card" id="card-remain-wrap">
-      <div class="card-label">Remaining Capacity</div>
-      <div class="card-value" id="card-total-remain">—</div>
-      <div class="card-sub">Cap &#8722; FTE &#8722; In-Flight</div>
-    </div>
-  </div>
-
-  <div class="table-card">
-    <div class="table-header">
-      <h2>By Client Group</h2>
-      <span class="tag live" id="table-live-badge">Loading...</span>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Client Group</th>
-          <th>HC Cap</th>
-          <th>Current FTE</th>
-          <th>In-Flight <span style="color:#2E7D31;font-weight:700;font-size:10px;">&#9679; LIVE</span></th>
-          <th>Utilisation</th>
-          <th>Variance to Cap</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="dept-table-body">
-        <tr><td colspan="7" style="text-align:center;color:#888;padding:24px;">Loading live data...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="table-card">
-    <div class="table-header">
-      <h2>All Requests — Last 30 Days</h2>
-      <span class="tag">Organisation-wide</span>
-    </div>
-    <table>
-      <thead>
-        <tr><th>Req ID</th><th>Role</th><th>Client Group</th><th>HM</th><th>Hire Type</th><th>Priority</th><th>Submitted</th><th>Status</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="font-family:monospace;color:#555">HC-2026-051</td>
-          <td><strong>Software Engineering, Senior</strong></td><td>TechDev</td><td>S. Chen</td>
-          <td>Net New</td><td><span class="rag rag-amber">P2</span></td><td>Aug 9</td>
-          <td><span class="status-badge s-gh">In Greenhouse</span></td>
-        </tr>
-        <tr>
-          <td style="font-family:monospace;color:#555">HC-2026-050</td>
-          <td><strong>Account Executive, Mid-Level</strong></td><td>RevGen</td><td>M. Reid</td>
-          <td>Backfill</td><td><span class="rag rag-red">P1</span></td><td>Aug 7</td>
-          <td><span class="status-badge s-gh">In Greenhouse</span></td>
-        </tr>
-        <tr>
-          <td style="font-family:monospace;color:#555">HC-2026-049</td>
-          <td><strong>Product Manager, Principal</strong></td><td>TechDev</td><td>S. Chen</td>
-          <td>Net New</td><td><span class="rag rag-amber">P2</span></td><td>Aug 5</td>
-          <td><span class="status-badge s-sub">COO Review</span></td>
-        </tr>
-        <tr>
-          <td style="font-family:monospace;color:#555">HC-2026-047</td>
-          <td><strong>Customer Success Manager</strong></td><td>RevGen</td><td>M. Reid</td>
-          <td>Net New</td><td><span class="rag rag-amber">P2</span></td><td>Jul 31</td>
-          <td><span class="status-badge s-defer">Over Cap — Deferred</span></td>
-        </tr>
-        <tr>
-          <td style="font-family:monospace;color:#555">HC-2026-046</td>
-          <td><strong>HR Business Partner</strong></td><td>Ops</td><td>P. Nair</td>
-          <td>Net New</td><td><span class="rag rag-green">P3</span></td><td>Jul 28</td>
-          <td><span class="status-badge s-gh">In Greenhouse</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
 <!-- TA All Requests tab -->
-<div class="screen" id="screen-ta-requests">
+<div class="screen active" id="screen-ta-requests">
   <div class="page-header">
     <h1>All Headcount Requests</h1>
     <p>Complete log of requests across all client groups. Filter by status in the live tool.</p>
@@ -382,7 +216,7 @@
           <td style="font-family:monospace;color:#555">HC-2026-047</td><td><strong>Customer Success Manager</strong></td>
           <td>RevGen</td><td>M. Reid</td><td>Net New</td><td>$85k–$110k</td>
           <td><span class="rag rag-amber">P2</span></td><td>Jul 31</td>
-          <td><span class="status-badge s-defer">Over Cap — Deferred</span></td>
+          <td><span class="status-badge" style="background:#FFF3CD;color:#856404;">Division Review</span></td>
           <td>—</td>
         </tr>
         <tr>
@@ -511,42 +345,9 @@
 <!-- Dept Dashboard -->
 <div class="screen" id="screen-dept-dashboard">
   <div class="page-header">
-    <h1 id="dept-title">TechDev — Headcount Overview</h1>
-    <p>Your department's headcount position against approved cap. Submit a request to add a new role.</p>
+    <h1 id="dept-title">TechDev — Headcount Requests</h1>
+    <p>Your team's headcount requests. Submit a request to add a new role.</p>
   </div>
-
-  <div class="dept-hero">
-    <div class="dept-hero-main">
-      <h2 id="dept-hero-name">TechDev</h2>
-      <p id="dept-hero-sub">Engineering · Product</p>
-      <div class="dept-hero-stats">
-        <div class="dhs">
-          <div class="v" id="dh-cap">—</div>
-          <div class="l">HC Cap</div>
-        </div>
-        <div class="dhs">
-          <div class="v" id="dh-fte">—</div>
-          <div class="l">Current FTE</div>
-        </div>
-        <div class="dhs amber">
-          <div class="v" id="dh-flight">—</div>
-          <div class="l">In-Flight</div>
-        </div>
-        <div class="dhs green">
-          <div class="v" id="dh-remain">—</div>
-          <div class="l">Remaining</div>
-        </div>
-      </div>
-    </div>
-    <div class="dept-hero-bar">
-      <div class="big-bar-label" style="font-size:11px;color:#888;margin-bottom:6px;">Capacity used</div>
-      <div class="big-bar-wrap"><div class="big-bar" id="dh-bar" style="width:0%;background:#aaa"></div></div>
-      <div class="big-bar-label" id="dh-pct" style="margin-top:6px;font-weight:700;color:#888">—</div>
-      <div style="margin-top:4px;"><span class="rag rag-amber" id="dh-rag">Loading</span></div>
-    </div>
-  </div>
-
-  <div id="subdept-grid" class="subdept-grid"></div>
 
   <div class="table-card">
     <div class="table-header">
@@ -572,22 +373,9 @@
   <div class="form-card">
     <div class="form-head">
       <h2>Headcount Request Form</h2>
-      <p>Fields marked * are required. Your request is logged against your department's cap before GH job creation.</p>
+      <p>Fields marked * are required.</p>
     </div>
     <div class="form-body">
-
-      <div class="cap-banner">
-        <div class="cap-item"><div class="cval" id="form-cap">—</div><div class="clbl">HC Cap</div></div>
-        <div class="cap-divider"></div>
-        <div class="cap-item"><div class="cval" id="form-fte">—</div><div class="clbl">Current FTE</div></div>
-        <div class="cap-divider"></div>
-        <div class="cap-item"><div class="cval" id="form-flight">—</div><div class="clbl">In-Flight</div></div>
-        <div class="cap-divider"></div>
-        <div class="cap-item"><div class="cval" id="form-remain" style="color:#003366">—</div><div class="clbl">Remaining</div></div>
-        <div style="margin-left:auto;font-size:12px;color:#666;max-width:200px;line-height:1.5;">
-          Capacity for <strong id="form-deptname">TechDev</strong>. This request counts against cap on submit.
-        </div>
-      </div>
 
       <div class="form-section">
         <div class="form-section-title">1 · Your Details</div>
@@ -710,8 +498,8 @@
         <div class="confirm-row"><span class="rlabel">After both approve</span><span class="rval" style="color:#888;">Job created in Greenhouse automatically</span></div>
       </div>
       <div class="confirm-footer">
-        <div style="font-size:13px;color:#555;">Your request is now visible on your team dashboard. You'll receive email updates at each stage.</div>
-        <a href="#" onclick="showDeptTab('dashboard');return false;" style="display:inline-block;margin-top:12px;font-size:12px;color:#888;">&#8592; Back to My Dashboard</a>
+        <div style="font-size:13px;color:#555;">Your request is now visible in My Requests. You'll receive email updates at each stage.</div>
+        <a href="#" onclick="showDeptTab('dashboard');return false;" style="display:inline-block;margin-top:12px;font-size:12px;color:#888;">&#8592; Back to My Requests</a>
       </div>
     </div>
   </div>
@@ -725,12 +513,6 @@ var CG_META = {
     name: 'TechDev', sub: 'Engineering · Product', cg: 'TechDev',
     leader: 'Sarah Chen', email: 'schen@geotab.com',
     depts: ['Engineering', 'Product'],
-    subdepts: [
-      { name: 'Core Platform',          capFrac: 0.38 },
-      { name: 'Mobile & Connected',     capFrac: 0.27 },
-      { name: 'Product Management',     capFrac: 0.20 },
-      { name: 'Data & ML',              capFrac: 0.15 }
-    ],
     requests: [
       { id: 'HC-2026-051', role: 'Software Engineering, Senior', type: 'Net New', salary: '$110k–$140k', pri: 'P2', priClass: 'rag-amber', date: 'Aug 9',  status: 'In Greenhouse',      sClass: 's-gh' },
       { id: 'HC-2026-049', role: 'Product Manager, Principal',    type: 'Net New', salary: '$125k–$155k', pri: 'P2', priClass: 'rag-amber', date: 'Aug 5',  status: 'COO Review',         sClass: 's-sub' },
@@ -742,15 +524,9 @@ var CG_META = {
     name: 'RevGen', sub: 'Sales · Marketing · RevSupport', cg: 'RevGen',
     leader: 'Marcus Reid', email: 'mreid@geotab.com',
     depts: ['Sales', 'Marketing', 'Customer Success'],
-    subdepts: [
-      { name: 'Enterprise Sales',       capFrac: 0.39 },
-      { name: 'Marketing',              capFrac: 0.25 },
-      { name: 'RevSupport',             capFrac: 0.19 },
-      { name: 'Channel & Partnerships', capFrac: 0.17 }
-    ],
     requests: [
       { id: 'HC-2026-050', role: 'Account Executive, Mid-Level',  type: 'Backfill', salary: '$80k–$100k',  pri: 'P1', priClass: 'rag-red',   date: 'Aug 7',  status: 'In Greenhouse',      sClass: 's-gh' },
-      { id: 'HC-2026-047', role: 'Customer Success Manager',       type: 'Net New',  salary: '$85k–$110k',  pri: 'P2', priClass: 'rag-amber', date: 'Jul 31', status: 'Over Cap — Deferred', sClass: 's-defer' },
+      { id: 'HC-2026-047', role: 'Customer Success Manager',       type: 'Net New',  salary: '$85k–$110k',  pri: 'P2', priClass: 'rag-amber', date: 'Jul 31', status: 'Division Review', sClass: 's-sub' },
       { id: 'HC-2026-041', role: 'Marketing Manager, Senior',      type: 'Net New',  salary: '$95k–$120k',  pri: 'P3', priClass: 'rag-green', date: 'Jul 20', status: 'In Greenhouse',      sClass: 's-gh' }
     ]
   },
@@ -758,12 +534,6 @@ var CG_META = {
     name: 'Ops', sub: 'TechOps · PeopleOps · FinOps · Legal', cg: 'Ops',
     leader: 'Priya Nair', email: 'pnair@geotab.com',
     depts: ['Operations', 'People Operations', 'Finance', 'Legal'],
-    subdepts: [
-      { name: 'TechOps',           capFrac: 0.33 },
-      { name: 'People Operations', capFrac: 0.26 },
-      { name: 'FinOps',            capFrac: 0.22 },
-      { name: 'Legal',             capFrac: 0.19 }
-    ],
     requests: [
       { id: 'HC-2026-046', role: 'HR Business Partner',     type: 'Net New',  salary: '$90k–$115k',  pri: 'P3', priClass: 'rag-green', date: 'Jul 28', status: 'In Greenhouse', sClass: 's-gh' },
       { id: 'HC-2026-038', role: 'Financial Analyst, Senior', type: 'Backfill', salary: '$85k–$108k',  pri: 'P2', priClass: 'rag-amber', date: 'Jul 10', status: 'Hired ✓',       sClass: 's-hired' }
@@ -773,10 +543,6 @@ var CG_META = {
     name: 'SMB', sub: 'SMB Sales · SMB Success', cg: 'SMB',
     leader: 'Jordan Walsh', email: 'jwalsh@geotab.com',
     depts: ['SMB Sales', 'SMB Customer Success'],
-    subdepts: [
-      { name: 'SMB Sales',            capFrac: 0.60 },
-      { name: 'SMB Customer Success', capFrac: 0.40 }
-    ],
     requests: [
       { id: 'HC-2026-044', role: 'SMB Account Executive',   type: 'Net New',  salary: '$70k–$90k',   pri: 'P1', priClass: 'rag-red',   date: 'Jul 25', status: 'In Greenhouse', sClass: 's-gh' },
       { id: 'HC-2026-033', role: 'SMB Account Executive',   type: 'Backfill', salary: '$70k–$90k',   pri: 'P1', priClass: 'rag-red',   date: 'Jun 18', status: 'In Greenhouse', sClass: 's-gh' },
@@ -787,193 +553,11 @@ var CG_META = {
     name: 'Vitality', sub: 'GeoVitality', cg: 'Vitality',
     leader: 'Amara Osei', email: 'aosei@geotab.com',
     depts: ['GeoVitality'],
-    subdepts: [
-      { name: 'Product & Engineering', capFrac: 0.55 },
-      { name: 'Commercial',            capFrac: 0.45 }
-    ],
     requests: [
       { id: 'HC-2026-043', role: 'Software Engineering, Senior', type: 'Net New', salary: '$105k–$135k', pri: 'P2', priClass: 'rag-amber', date: 'Jul 22', status: 'In Greenhouse', sClass: 's-gh' }
     ]
   }
 };
-
-// CG order for the summary table (matches data.json)
-var CG_KEYS = ['TechDev', 'RevGen', 'Ops', 'SMB', 'Vitality'];
-var CG_SUBS = {
-  TechDev:  'Engineering · Product',
-  RevGen:   'Sales · Marketing · RevSupport',
-  Ops:      'TechOps · PeopleOps · FinOps · Legal',
-  SMB:      'SMB Sales · SMB Success',
-  Vitality: 'GeoVitality'
-};
-
-// ── Live data (loaded from data.json) ─────────────────────────────────────
-var liveData = null;   // null until loaded; false if load failed
-
-function fetchLiveData() {
-  setBanner('loading', 'Loading live data from Greenhouse...');
-
-  // data.json sits beside index.html in the repo root
-  var url = 'data.json?t=' + Date.now();
-
-  fetch(url)
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function(data) {
-      liveData = {};
-      (data.cgs || []).forEach(function(row) {
-        liveData[row.name] = { cap: row.cap, fte: row.fte, flight: row.flight };
-      });
-
-      // Format sync time
-      var ts = 'unknown';
-      if (data.synced) {
-        try {
-          var d = new Date(data.synced);
-          ts = d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' }) +
-               ' ' + d.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit' });
-        } catch(e) { ts = data.synced; }
-      }
-      setBanner('live', 'In-Flight live from Greenhouse BQ · Last sync: ' + ts + ' ET · Updated daily 8:37 AM');
-
-      hydrateSummaryCards();
-      hydrateDeptTable();
-
-      // Re-render dept view if one is currently shown
-      if (currentDept) {
-        populateDeptView(currentDept);
-      }
-    })
-    .catch(function(err) {
-      liveData = false;
-      setBanner('error', 'Could not load live data — showing demo values (' + err.message + ')');
-      hydrateSummaryCards();
-      hydrateDeptTable();
-    });
-}
-
-function setBanner(state, text) {
-  var el = document.getElementById('live-banner');
-  var txt = document.getElementById('live-banner-text');
-  el.className = 'live-banner ' + (state === 'live' ? '' : state);
-  txt.textContent = text;
-}
-
-// ── Hydrate TA summary cards ──────────────────────────────────────────────
-function hydrateSummaryCards() {
-  var totalCap    = 0, hasCap    = false;
-  var totalFte    = 0, hasFte    = false;
-  var totalFlight = 0;
-
-  CG_KEYS.forEach(function(cg) {
-    var row = liveData && liveData[cg] ? liveData[cg] : {};
-    if (row.cap  != null) { totalCap    += row.cap;    hasCap  = true; }
-    if (row.fte  != null) { totalFte    += row.fte;    hasFte  = true; }
-    if (row.flight != null) totalFlight += row.flight;
-  });
-
-  setText('card-total-cap',    hasCap  ? totalCap    : '—');
-  setText('card-total-fte',    hasFte  ? totalFte    : '—');
-  setText('card-total-flight', totalFlight);
-
-  // Show setup callout only when live data loaded but cap not yet configured
-  var callout = document.getElementById('setup-callout');
-  if (callout) {
-    callout.style.display = (liveData && !hasCap) ? 'flex' : 'none';
-  }
-
-  var remWrap = document.getElementById('card-remain-wrap');
-  if (hasCap && hasFte) {
-    var rem = totalCap - totalFte - totalFlight;
-    setText('card-total-remain', (rem >= 0 ? '+' : '') + rem);
-    remWrap.className = 'card ' + (rem > 0 ? 'green' : rem === 0 ? 'amber' : 'red');
-  } else {
-    setText('card-total-remain', '—');
-    remWrap.className = 'card';
-  }
-}
-
-// ── Hydrate "By Client Group" table ──────────────────────────────────────
-function hydrateDeptTable() {
-  var tbody = document.getElementById('dept-table-body');
-  var badge = document.getElementById('table-live-badge');
-
-  if (liveData === false) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#C0392B;padding:20px;">Could not load live data</td></tr>';
-    badge.textContent = 'Unavailable';
-    badge.className = 'tag';
-    return;
-  }
-
-  badge.textContent = 'Live';
-  badge.className = 'tag live';
-
-  var rows = '';
-  CG_KEYS.forEach(function(cg) {
-    var row    = (liveData && liveData[cg]) ? liveData[cg] : {};
-    var cap    = row.cap    != null ? row.cap    : null;
-    var fte    = row.fte    != null ? row.fte    : null;
-    var flight = row.flight != null ? row.flight : 0;
-
-    var capStr = cap    != null ? cap    : '—';
-    var fteStr = fte    != null ? fte    : '—';
-
-    var pct = (cap != null && fte != null) ? Math.round(((fte + flight) / cap) * 100) : null;
-    var rem = (cap != null && fte != null) ? (cap - fte - flight) : null;
-
-    var barColor = 'bar-green', ragClass = 'rag-green', ragLabel = 'On Track';
-    if (pct != null) {
-      if (pct > 100)     { barColor = 'bar-red';   ragClass = 'rag-red';   ragLabel = 'Over Cap'; }
-      else if (pct > 95) { barColor = 'bar-amber';  ragClass = 'rag-amber'; ragLabel = 'At Cap'; }
-    } else {
-      ragClass = 'rag-amber'; ragLabel = 'Cap pending';
-    }
-
-    var utilCell = pct != null
-      ? '<div class="progress-wrap"><div class="progress-bar ' + barColor + '" style="width:' + Math.min(pct,100) + '%"></div></div>' +
-        '<span class="progress-label">' + pct + '%</span>'
-      : '<span style="color:#888;font-size:12px;">—</span>';
-
-    var varCell = rem != null
-      ? '<span class="' + (rem >= 0 ? 'var-pos' : 'var-neg') + '">' + (rem >= 0 ? '+' : '') + rem + '</span>'
-      : '<span style="color:#888;">—</span>';
-
-    rows +=
-      '<tr>' +
-        '<td><div class="dept-name">' + cg + '</div><div class="sub-dept">' + (CG_SUBS[cg] || '') + '</div></td>' +
-        '<td>' + capStr + '</td>' +
-        '<td>' + fteStr + '</td>' +
-        '<td><strong>' + flight + '</strong></td>' +
-        '<td>' + utilCell + '</td>' +
-        '<td>' + varCell + '</td>' +
-        '<td><span class="rag ' + ragClass + '">' + ragLabel + '</span></td>' +
-      '</tr>';
-  });
-
-  // Totals row
-  var totalFlight = 0, totalCap = 0, totalFte = 0, hasCap = false, hasFte = false;
-  CG_KEYS.forEach(function(cg) {
-    var r = (liveData && liveData[cg]) ? liveData[cg] : {};
-    if (r.cap  != null) { totalCap  += r.cap;  hasCap = true; }
-    if (r.fte  != null) { totalFte  += r.fte;  hasFte = true; }
-    if (r.flight != null) totalFlight += r.flight;
-  });
-  var totalRem = (hasCap && hasFte) ? (totalCap - totalFte - totalFlight) : null;
-  rows +=
-    '<tr style="background:#f4f7fb;font-weight:700;">' +
-      '<td>Total</td>' +
-      '<td>' + (hasCap ? totalCap : '—') + '</td>' +
-      '<td>' + (hasFte ? totalFte : '—') + '</td>' +
-      '<td><strong>' + totalFlight + '</strong></td>' +
-      '<td></td>' +
-      '<td>' + (totalRem != null ? '<span class="' + (totalRem >= 0 ? 'var-pos' : 'var-neg') + '">' + (totalRem >= 0 ? '+' : '') + totalRem + '</span>' : '—') + '</td>' +
-      '<td></td>' +
-    '</tr>';
-
-  tbody.innerHTML = rows;
-}
 
 // ── Role switch ───────────────────────────────────────────────────────────
 var currentRole = 'ta';
@@ -987,19 +571,18 @@ function switchRole(val) {
   if (val === 'ta') {
     currentDept = null;
     banner.className = 'role-banner ta';
-    banner.innerHTML = '&#128274; <strong>TA / HR / Exec view</strong> &mdash; full organisation dashboard';
+    banner.innerHTML = '&#128274; <strong>TA / HR / Exec view</strong> &mdash; all headcount requests';
     navTabs.innerHTML =
-      '<div class="nav-tab active" onclick="showTA(\'dashboard\')">Dashboard</div>' +
-      '<div class="nav-tab" onclick="showTA(\'requests\')">All Requests</div>' +
+      '<div class="nav-tab active" onclick="showTA(\'requests\')">All Requests</div>' +
       '<div class="nav-tab" onclick="showTA(\'pending\')">Pending Approvals <span style="background:#C0392B;color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;font-weight:700;">2</span></div>';
-    showTA('dashboard');
+    showTA('requests');
   } else {
     currentDept = val;
     var meta = CG_META[val];
     banner.className = 'role-banner dept';
     banner.innerHTML = '&#128100; Viewing as <strong>' + meta.leader + '</strong> (' + meta.name + ' Leader) &mdash; you can only see your department\'s data';
     navTabs.innerHTML =
-      '<div class="nav-tab active" onclick="showDeptTab(\'dashboard\')">My Dashboard</div>' +
+      '<div class="nav-tab active" onclick="showDeptTab(\'dashboard\')">My Requests</div>' +
       '<div class="nav-tab" onclick="showDeptTab(\'form\')">New Request</div>';
     populateDeptView(val);
     showDeptTab('dashboard');
@@ -1009,7 +592,7 @@ function switchRole(val) {
 function showTA(name) {
   hideAll();
   document.getElementById('screen-ta-' + name).classList.add('active');
-  var idx = { dashboard: 0, requests: 1, pending: 2 }[name] || 0;
+  var idx = { requests: 0, pending: 1 }[name] || 0;
   updateNavActive(idx);
 }
 
@@ -1031,75 +614,9 @@ function updateNavActive(idx) {
 
 // ── Populate dept leader view ──────────────────────────────────────────────
 function populateDeptView(deptKey) {
-  var meta  = CG_META[deptKey];
-  var cgKey = meta.name; // e.g. 'TechDev'
+  var meta = CG_META[deptKey];
 
-  // Get live numbers (or null if not loaded yet)
-  var row    = (liveData && liveData[cgKey]) ? liveData[cgKey] : {};
-  var cap    = row.cap    != null ? row.cap    : null;
-  var fte    = row.fte    != null ? row.fte    : null;
-  var flight = row.flight != null ? row.flight : null;
-  var remain = (cap != null && fte != null && flight != null) ? (cap - fte - flight) : null;
-  var pct    = (cap != null && fte != null && flight != null) ? Math.round(((fte + flight) / cap) * 100) : null;
-
-  // Hero card
-  setText('dept-title',     meta.name + ' — Headcount Overview');
-  setText('dept-hero-name', meta.name);
-  setText('dept-hero-sub',  meta.sub);
-  setText('dh-cap',    cap    != null ? cap    : '—');
-  setText('dh-fte',    fte    != null ? fte    : '—');
-  setText('dh-flight', flight != null ? flight : '—');
-
-  var remEl = document.getElementById('dh-remain');
-  if (remain != null) {
-    remEl.textContent = (remain >= 0 ? '+' : '') + remain;
-    remEl.parentElement.className = 'dhs ' + (remain > 0 ? 'green' : remain === 0 ? 'amber' : 'red');
-  } else {
-    remEl.textContent = '—';
-    remEl.parentElement.className = 'dhs';
-  }
-
-  var barEl  = document.getElementById('dh-bar');
-  var pctEl  = document.getElementById('dh-pct');
-  var ragEl  = document.getElementById('dh-rag');
-
-  if (pct != null) {
-    var barColor = '#2E7D31', ragClass = 'rag-green', ragLabel = 'On Track';
-    if (pct > 100)     { barColor = '#C0392B'; ragClass = 'rag-red';   ragLabel = 'Over Cap'; }
-    else if (pct > 95) { barColor = '#C8A000'; ragClass = 'rag-amber'; ragLabel = 'At Cap'; }
-    barEl.style.width      = Math.min(pct, 100) + '%';
-    barEl.style.background = barColor;
-    pctEl.textContent      = pct + '%';
-    pctEl.style.color      = barColor;
-    ragEl.className        = 'rag ' + ragClass;
-    ragEl.textContent      = ragLabel;
-  } else {
-    barEl.style.width      = '0%';
-    barEl.style.background = '#aaa';
-    pctEl.textContent      = '—';
-    pctEl.style.color      = '#888';
-    ragEl.className        = 'rag rag-amber';
-    ragEl.textContent      = 'Cap pending';
-  }
-
-  // Sub-dept grid — distribute live flight proportionally if cap not set
-  var grid = document.getElementById('subdept-grid');
-  grid.innerHTML = meta.subdepts.map(function(sd) {
-    var sdCap    = cap    != null ? Math.round(cap    * sd.capFrac) : null;
-    var sdFte    = fte    != null ? Math.round(fte    * sd.capFrac) : null;
-    var sdFlight = flight != null ? Math.round(flight * sd.capFrac) : null;
-    var sdRem    = (sdCap != null && sdFte != null && sdFlight != null) ? (sdCap - sdFte - sdFlight) : null;
-    var sdPct    = (sdCap != null && sdFte != null && sdFlight != null) ? Math.round(((sdFte + sdFlight) / sdCap) * 100) : null;
-    return '<div class="subdept-card"><h3>' + sd.name + '</h3>' +
-      row_('HC Cap',      sdCap    != null ? sdCap    : '—') +
-      row_('Current FTE', sdFte    != null ? sdFte    : '—') +
-      row_('In-Flight',   sdFlight != null ? sdFlight : '—') +
-      row_('Utilisation', sdPct    != null ? sdPct + '%' : '—') +
-      (sdRem != null
-        ? '<div class="subdept-row"><span class="sk">Remaining</span><span class="sv" style="color:' + (sdRem > 0 ? '#2E7D31' : '#C0392B') + '">' + (sdRem >= 0 ? '+' : '') + sdRem + '</span></div>'
-        : row_('Remaining', '—')) +
-      '</div>';
-  }).join('');
+  setText('dept-title', meta.name + ' — Headcount Requests');
 
   // Requests table
   var tbody = document.getElementById('dept-requests-body');
@@ -1116,19 +633,6 @@ function populateDeptView(deptKey) {
       '</tr>';
   }).join('');
 
-  // Form capacity banner
-  setText('form-cap',    cap    != null ? cap    : '—');
-  setText('form-fte',    fte    != null ? fte    : '—');
-  setText('form-flight', flight != null ? flight : '—');
-  var formRemEl = document.getElementById('form-remain');
-  if (remain != null) {
-    formRemEl.textContent = (remain >= 0 ? '+' : '') + remain;
-    formRemEl.style.color = remain > 0 ? '#2E7D31' : '#C0392B';
-  } else {
-    formRemEl.textContent = '—';
-    formRemEl.style.color = '#003366';
-  }
-  setText('form-deptname', meta.name);
   document.getElementById('form-name').value  = meta.leader;
   document.getElementById('form-email').value = meta.email;
   setText('confirm-dept', meta.depts[0] + ' · ' + meta.name);
@@ -1146,10 +650,6 @@ function setText(id, val) {
   if (el) el.textContent = val;
 }
 
-function row_(label, val) {
-  return '<div class="subdept-row"><span class="sk">' + label + '</span><span class="sv">' + val + '</span></div>';
-}
-
 function showToast(msg) {
   var t = document.getElementById('toast');
   t.textContent = msg;
@@ -1160,7 +660,6 @@ function showToast(msg) {
 // ── Init ─────────────────────────────────────────────────────────────────
 (function() {
   switchRole('ta');
-  fetchLiveData();
 })();
 </script>
 </body>
