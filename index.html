@@ -181,14 +181,14 @@
 <div class="screen active" id="screen-ta-requests">
   <div class="page-header">
     <h1>All Headcount Requests</h1>
-    <p>Complete log of requests across all client groups. Filter by status in the live tool.</p>
+    <p>Complete log of requests across all business segments. Filter by status in the live tool.</p>
   </div>
   <div class="access-notice">&#128274; This view is restricted to TA, HR, and Exec roles. Department leaders see only their own team's requests.</div>
   <div class="table-card">
-    <div class="table-header"><h2>FY 2026 — All Client Groups</h2><span class="tag">TA / HR view</span></div>
+    <div class="table-header"><h2>FY 2026 — All Business Segments</h2><span class="tag">TA / HR view</span></div>
     <table>
       <thead>
-        <tr><th>Req ID</th><th>Role</th><th>Client Group</th><th>HM</th><th>Hire Type</th><th>Salary Range</th><th>Priority</th><th>Submitted</th><th>Status</th><th>GH Job</th></tr>
+        <tr><th>Req ID</th><th>Role</th><th>Business Segment</th><th>HM</th><th>Hire Type</th><th>Salary Range</th><th>Priority</th><th>Submitted</th><th>Status</th><th>GH Job</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -269,7 +269,7 @@
     <table>
       <thead>
         <tr>
-          <th>Req ID</th><th>Role</th><th>Client Group</th><th>HM</th>
+          <th>Req ID</th><th>Role</th><th>Business Segment</th><th>HM</th>
           <th>Stage</th><th>Waiting On</th><th>Submitted</th><th>Actions</th>
         </tr>
       </thead>
@@ -382,14 +382,9 @@
         <div class="form-row">
           <div class="field">
             <label>Your Full Name <span class="req">*</span></label>
-            <input type="text" id="form-name" value="Sarah Chen">
+            <input type="text" id="form-name" value="Sarah Chen" readonly>
+            <div class="hint">Captured automatically via SSO</div>
           </div>
-          <div class="field">
-            <label>Your Email <span class="req">*</span></label>
-            <input type="email" id="form-email" value="schen@geotab.com">
-          </div>
-        </div>
-        <div class="form-row single">
           <div class="field">
             <label>Your Division <span class="req">*</span></label>
             <select id="form-division-select"></select>
@@ -660,7 +655,6 @@ function populateDeptView(deptKey) {
   }).join('');
 
   document.getElementById('form-name').value  = meta.leader;
-  document.getElementById('form-email').value = meta.email;
   setText('confirm-dept', meta.name);
 
   var divSel = document.getElementById('form-division-select');
