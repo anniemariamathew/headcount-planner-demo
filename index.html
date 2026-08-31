@@ -378,7 +378,7 @@
     <div class="form-body">
 
       <div class="form-section">
-        <div class="form-section-title">1 · Your Details</div>
+        <div class="form-section-title">1 · Hiring Team Details</div>
         <div class="form-row">
           <div class="field">
             <label>Your Full Name <span class="req">*</span></label>
@@ -387,6 +387,12 @@
           <div class="field">
             <label>Your Email <span class="req">*</span></label>
             <input type="email" id="form-email" value="schen@geotab.com">
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="field">
+            <label>Your Division <span class="req">*</span></label>
+            <select id="form-division-select"></select>
           </div>
         </div>
       </div>
@@ -410,17 +416,36 @@
         </div>
         <div class="form-row three">
           <div class="field">
-            <label>Department <span class="req">*</span></label>
-            <select id="form-dept-select"></select>
+            <label>Domain Name <span class="req">*</span></label>
+            <input type="text" id="form-domain" placeholder="e.g. TechDev">
           </div>
           <div class="field">
-            <label>Client Group <span class="req">*</span></label>
-            <select id="form-cg-select"></select>
+            <label>Team <span class="req">*</span></label>
+            <input type="text" id="form-team" placeholder="e.g. Engineering">
+          </div>
+          <div class="field">
+            <label>Sub-Team <span class="req">*</span></label>
+            <input type="text" id="form-subteam" placeholder="e.g. Platform">
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="field">
+            <label>Location <span class="req">*</span></label>
+            <select>
+              <option selected>Toronto HQ</option><option>Remote - Canada</option>
+              <option>Remote - US</option><option>Europe - UK</option><option>Other</option>
+            </select>
           </div>
           <div class="field">
             <label>Hire Type <span class="req">*</span></label>
             <select id="form-hiretype-select" onchange="toggleBackfillField(this.value)">
               <option selected>Net New</option><option>Backfill</option>
+            </select>
+          </div>
+          <div class="field" id="form-backfill-type-field" style="display:none;">
+            <label>Backfill Type <span class="req">*</span></label>
+            <select id="form-backfill-type">
+              <option>Regrettable</option><option>Non-Regrettable</option>
             </select>
           </div>
         </div>
@@ -434,18 +459,11 @@
       </div>
 
       <div class="form-section">
-        <div class="form-section-title">3 · Logistics</div>
-        <div class="form-row three">
+        <div class="form-section-title">3 · Commitment to Hire</div>
+        <div class="form-row">
           <div class="field">
-            <label>Target Start Date <span class="req">*</span></label>
+            <label>Target Hiring Date <span class="req">*</span></label>
             <input type="date" value="2026-11-01">
-          </div>
-          <div class="field">
-            <label>Location <span class="req">*</span></label>
-            <select>
-              <option selected>Toronto HQ</option><option>Remote - Canada</option>
-              <option>Remote - US</option><option>Europe - UK</option><option>Other</option>
-            </select>
           </div>
           <div class="field">
             <label>Priority <span class="req">*</span></label>
@@ -495,9 +513,10 @@
       <div class="confirm-body">
         <div class="confirm-row"><span class="rlabel">Request ID</span><span class="rval" style="font-family:monospace">HC-2026-052</span></div>
         <div class="confirm-row"><span class="rlabel">Role</span><span class="rval">Software Engineering, Senior</span></div>
-        <div class="confirm-row"><span class="rlabel">Department</span><span class="rval" id="confirm-dept">Engineering · TechDev</span></div>
+        <div class="confirm-row"><span class="rlabel">Division</span><span class="rval" id="confirm-dept">TechDev</span></div>
+        <div class="confirm-row"><span class="rlabel">Team / Sub-Team</span><span class="rval">Engineering · Platform</span></div>
         <div class="confirm-row"><span class="rlabel">Hire Type</span><span class="rval">Net New</span></div>
-        <div class="confirm-row"><span class="rlabel">Target Start</span><span class="rval">Nov 1, 2026</span></div>
+        <div class="confirm-row"><span class="rlabel">Target Hiring Date</span><span class="rval">Nov 1, 2026</span></div>
         <div class="confirm-row"><span class="rlabel">Salary Range</span><span class="rval">$110,000 – $140,000</span></div>
         <div class="confirm-row"><span class="rlabel">Priority</span><span class="rval">P2 — High</span></div>
         <div class="confirm-row"><span class="rlabel">Step 1</span><span class="rval">Division Leader — notified ✓</span></div>
@@ -642,13 +661,16 @@ function populateDeptView(deptKey) {
 
   document.getElementById('form-name').value  = meta.leader;
   document.getElementById('form-email').value = meta.email;
-  setText('confirm-dept', meta.depts[0] + ' · ' + meta.name);
+  setText('confirm-dept', meta.name);
 
-  var deptSel = document.getElementById('form-dept-select');
-  deptSel.innerHTML = meta.depts.map(function(d) { return '<option>' + d + '</option>'; }).join('');
+  var divSel = document.getElementById('form-division-select');
+  divSel.innerHTML = Object.keys(CG_META).map(function(k) {
+    return '<option value="' + k + '"' + (k === deptKey ? ' selected' : '') + '>' + CG_META[k].name + '</option>';
+  }).join('');
 
-  var cgSel = document.getElementById('form-cg-select');
-  cgSel.innerHTML = '<option selected>' + meta.cg + '</option>';
+  document.getElementById('form-domain').value  = meta.name;
+  document.getElementById('form-team').value    = meta.depts[0];
+  document.getElementById('form-subteam').value = '';
 
   document.getElementById('form-hiretype-select').value = 'Net New';
   toggleBackfillField('Net New');
@@ -656,9 +678,12 @@ function populateDeptView(deptKey) {
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function toggleBackfillField(hireType) {
-  var row = document.getElementById('form-backfill-row');
-  row.style.display = (hireType === 'Backfill') ? '' : 'none';
-  if (hireType !== 'Backfill') document.getElementById('form-backfill-name').value = '';
+  var row      = document.getElementById('form-backfill-row');
+  var typeFld  = document.getElementById('form-backfill-type-field');
+  var show     = (hireType === 'Backfill');
+  row.style.display     = show ? '' : 'none';
+  typeFld.style.display = show ? '' : 'none';
+  if (!show) document.getElementById('form-backfill-name').value = '';
 }
 
 function setText(id, val) {
